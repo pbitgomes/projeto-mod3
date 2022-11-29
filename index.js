@@ -1,9 +1,13 @@
 import express from 'express'
 import * as dotenv from 'dotenv'
 import employeeRouter from './routes/employees.routes.js'
+import dbConnection from './config/db.config.js'
 
 // configuração padrão do dotenv (setada porta 8080)
 dotenv.config()
+
+dbConnection()
+
 // inicialização do express
 const app = express()
 // permitir a interpretação de json()
