@@ -33,7 +33,7 @@ const employeeSchema = new Schema(
     }
 )
 
-        // tem que ser no singular -> na collection vira plural
+        // tem que ser no singular -> na collection (no Mongo) vira plural (employee -> employees)
 const EmployeeModel = model("Employee", employeeSchema)
 
 export default EmployeeModel
