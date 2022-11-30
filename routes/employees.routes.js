@@ -9,8 +9,25 @@ const router = express.Router();
 router.get("/", async (request, response) => {
   try {
     const employees = await EmployeeModel.find();
-
     return response.status(200).json(employees);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).json({ msg: "Algo está errado." });
+  }
+});
+
+//GET BY ID
+router.get("/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+
+    const employee = await EmployeeModel.findById(id);
+
+    if (!employee) {
+      return response.status(404).json("Funcionário não encontrado.");
+    }
+
+    return response.status(201).json(employee);
   } catch (error) {
     console.log(error);
     return response.status(500).json({ msg: "Algo está errado." });
