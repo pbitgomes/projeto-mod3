@@ -4,18 +4,8 @@ import EmployeeModel from "../models/employee.models.js";
 
 const router = express.Router();
 
-// banco de dados (será feito no mongo)
-// let data = [
-//     {
-//         name: "Paula",
-//         department: "T.I."
-//     }
-// ]
-
 // ---------- ROTAS ----------
 // MÉTODO GET
-// no json temos a resposta que queremos obter
-// SEMPRE retornamos algo, uma resposta
 router.get("/", async (request, response) => {
   try {
     const employees = await EmployeeModel.find();
@@ -27,7 +17,7 @@ router.get("/", async (request, response) => {
   }
 });
 
-// MÉTODO POST: passa o caminho, chama a requisição, captura o body, insere o id, dá push no dado original
+// MÉTODO POST
 router.post("/create", async (request, response) => {
   try {
     const newEmployee = await EmployeeModel.create(request.body);
@@ -39,42 +29,34 @@ router.post("/create", async (request, response) => {
   }
 });
 
-// MÉTODO PUT: encontrar o item, encontrar a posição do item
-router.put("/edit/:id", (request, response) => {
-  // seta o id como um parâmetro
-  const { id } = request.params;
+// MÉTODO PUT
+router.put("/edit/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
 
-  // encontrar o item
-  const update = data.find((item) => item.id == id);
+    const update = await EmployeeModel.findByIdAndUpdate(
+      id,
+      { ...request.body },
+      { new: true, runValidators: true }
+    );
 
-  // encontrar a posição do item
-  const index = data.indexOf(update);
-
-  //array[posição] = item, atualiza o item existente
-  data[index] = {
-    ...update,
-    ...request.body,
-  };
-
-  // retorna o item atualizado
-  return response.status(200).json(data[index]);
+    return response.status(200).json(update);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).json({ msg: "Algo está errado." });
+  }
 });
 
-// MÉTODO DELETE: setar o parâmetro da requisição, encontrar o item, encontrar a posição, fazer SPLICE
-router.delete("/delete/:id", (request, response) => {
-  //passa id como parâmetro
-  const { id } = request.params;
-
-  // encontrar o item
-  const deleteById = data.find((item) => item.id == id);
-
-  // descobre a posição do item
-  const index = data.indexOf(deleteById);
-
-  // exclui o item do id usado como parâmetro que está posicionado no index
-  data.splice(index, 1);
-
-  return response.status(200).json(data);
+// MÉTODO DELETE
+router.delete("/delete/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const deleteEmployee = await EmployeeModel.findByIdAndDelete(id);
+    return response.status(200).json(deleteEmployee);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).json({ msg: "Algo está errado." });
+  }
 });
 
 export default router;
