@@ -1,6 +1,7 @@
 import express from 'express'
 import * as dotenv from 'dotenv'
 import employeeRouter from './routes/employees.routes.js'
+import toDoRouter from './routes/todo.routes.js'
 import dbConnection from './config/db.config.js'
 
 // configuração padrão do dotenv (setada porta 8080)
@@ -18,11 +19,11 @@ app.use('/employee', employeeRouter)
 // UMA ROTA PARA CADA FUNCIONALIDADE!
 // por exemplo: acesso "http://localhost:8080/employee/edit/:id" 
 
-// app.use('/todo', toDoRouter)
-// "http://localhost:8080/todo"
-// "http://localhost:8080/todo/create"
-// "http://localhost:8080/todo/edit/:id"
-// "http://localhost:8080/todo/delete/:id"
+app.use('/todo', toDoRouter)
+"http://localhost:8080/todo"
+"http://localhost:8080/todo/create"
+"http://localhost:8080/todo/edit/:id"
+"http://localhost:8080/todo/delete/:id"
 
 // executar o sevidor na porta 8080
 app.listen(Number(process.env.PORT), () => console.log('server on port 8080!'))
